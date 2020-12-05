@@ -9,7 +9,6 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
 import drm.ezenglish.App
 import drm.ezenglish.entities.ListeningQuestion
-import drm.ezenglish.util.FirebaseCallback
 import java.util.*
 
 class ListeningViewModel(private val app: App, resourceId: Int) : AndroidViewModel(app) {
@@ -57,7 +56,7 @@ class ListeningViewModel(private val app: App, resourceId: Int) : AndroidViewMod
 
     fun cleanUp () = player.release()
 
-    fun getQuestionsFromFirebase(path: String, callback: FirebaseCallback<List<ListeningQuestion>>) {
+    fun getQuestionsFromFirebase(path: String, callback: (List<ListeningQuestion>) -> Unit) {
         val questions = mutableListOf<ListeningQuestion>()
         dbReference.child(path).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -69,12 +68,11 @@ class ListeningViewModel(private val app: App, resourceId: Int) : AndroidViewMod
                             questions.add(question)
                         }
                     }
-                    callback.onCallback(questions)
+                    callback(questions)
                 }
             }
             override fun onCancelled(error: DatabaseError) {}
         })
-//        return questions
     }
 
     private fun playAudio() {

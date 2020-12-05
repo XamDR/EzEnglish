@@ -13,8 +13,6 @@ import drm.ezenglish.R
 import drm.ezenglish.activities.MainActivity
 import drm.ezenglish.adapters.QuestionListeningAdapter
 import drm.ezenglish.databinding.FragmentListeningBinding
-import drm.ezenglish.entities.ListeningQuestion
-import drm.ezenglish.util.FirebaseCallback
 import drm.ezenglish.viewmodels.ListeningViewModel
 
 class ListeningFragment : Fragment() {
@@ -48,24 +46,18 @@ class ListeningFragment : Fragment() {
 
     private fun bindAdapter(resourceId: Int) {
         when (resourceId) {
-            R.raw.books -> viewModel.getQuestionsFromFirebase("books", object : FirebaseCallback<List<ListeningQuestion>> {
-                    override fun onCallback(value: List<ListeningQuestion>) {
-                        viewModel.questions.value = value
-                        binding.rvListeningQuestions.adapter = QuestionListeningAdapter(this@ListeningFragment, viewModel.questions.value!!)
-                    }
-                })
-            R.raw.family -> viewModel.getQuestionsFromFirebase("family", object: FirebaseCallback<List<ListeningQuestion>> {
-                override fun onCallback(value: List<ListeningQuestion>) {
-                    viewModel.questions.value = value
-                    binding.rvListeningQuestions.adapter = QuestionListeningAdapter(this@ListeningFragment, viewModel.questions.value!!)
-                }
-            })
-            R.raw.restaurant -> viewModel.getQuestionsFromFirebase("restaurant", object: FirebaseCallback<List<ListeningQuestion>> {
-                override fun onCallback(value: List<ListeningQuestion>) {
-                    viewModel.questions.value = value
-                    binding.rvListeningQuestions.adapter = QuestionListeningAdapter(this@ListeningFragment, viewModel.questions.value!!)
-                }
-            })
+            R.raw.books -> viewModel.getQuestionsFromFirebase("books") {
+                viewModel.questions.value = it
+                binding.rvListeningQuestions.adapter = QuestionListeningAdapter(this, viewModel.questions.value!!)
+            }
+            R.raw.family -> viewModel.getQuestionsFromFirebase("family") {
+                viewModel.questions.value = it
+                binding.rvListeningQuestions.adapter = QuestionListeningAdapter(this, viewModel.questions.value!!)
+            }
+            R.raw.restaurant -> viewModel.getQuestionsFromFirebase("restaurant") {
+                viewModel.questions.value = it
+                binding.rvListeningQuestions.adapter = QuestionListeningAdapter(this, viewModel.questions.value!!)
+            }
         }
     }
 }
