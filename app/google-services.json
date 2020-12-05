@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "635105984275",
+    "project_id": "ezenglish-78398",
+    "storage_bucket": "ezenglish-78398.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:635105984275:android:9d3c6d42a6b9b03fcf64e6",
+        "android_client_info": {
+          "package_name": "drm.ezenglish"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "635105984275-hn7etdlb2fot1c9e6vtrkln7mbmv5m4k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEQnDV1BtlGWAO1bANo-Pg_YXgxvMdXiI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "635105984275-hn7etdlb2fot1c9e6vtrkln7mbmv5m4k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

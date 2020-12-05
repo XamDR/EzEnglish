@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="drm.ezenglish.util.Converter"/>
+        <variable
+            name="viewModel"
+            type="drm.ezenglish.viewmodels.ListeningViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/primaryColor"
+        tools:context=".views.ListeningFragment">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textSize="20sp"
+            android:textColor="@color/primaryTextColor"
+            android:gravity="center|top"
+            android:text="@string/fragment_listening_title" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:background="@color/primaryColor"
+                android:contentDescription="@string/btn_desc"
+                android:scaleType="fitCenter"
+                android:src="@{viewModel.isPlaying ? @drawable/ic_pause_audio : @drawable/ic_play_audio}"
+                android:tint="@color/primaryTextColor"
+                android:onClick="@{() -> viewModel.toggleAudio()}"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="1dp"
+                android:layout_gravity="center"
+                android:textColor="@color/primaryTextColor"
+                android:text="@{Converter.setCurrentPosition(viewModel.currentPosition)}"
+                tools:text="3:13"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginEnd="2dp"
+                android:layout_gravity="center"
+                android:textColor="@color/primaryTextColor"
+                android:text="@{Converter.setDuration(viewModel.duration)}"
+                tools:text="/ 5:00"/>
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:max="@{viewModel.duration}"
+                android:progress="@={viewModel.currentPosition}"
+                android:onProgressChanged="@{() -> viewModel.onProgressChanged()}"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:text="@string/questions"
+            android:textColor="@color/primaryTextColor" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvListeningQuestions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="5dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center|bottom"
+                    android:gravity="center"
+                    android:text="@string/show_score"
+                    android:backgroundTint="@color/accentColor"
+                    android:textColor="@color/primaryTextColor"/>
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+</layout>

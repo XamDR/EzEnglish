@@ -1,0 +1,102 @@
+package drm.ezenglish.activities
+
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.navigation.NavigationView
+import drm.ezenglish.R
+
+class MainActivity : AppCompatActivity() {
+
+	private lateinit var appBarConfiguration: AppBarConfiguration
+
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		setContentView(R.layout.activity_main)
+		val toolbar: Toolbar = findViewById(R.id.toolbar)
+		setSupportActionBar(toolbar)
+
+		val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+		val navView: NavigationView = findViewById(R.id.nav_view)
+		val navController = findNavController(R.id.nav_host_fragment)
+
+		appBarConfiguration = AppBarConfiguration(
+			setOf(R.id.nav_home, R.id.nav_listening, R.id.nav_speaking, R.id.nav_writing),
+			drawerLayout
+		)
+		setupActionBarWithNavController(navController, appBarConfiguration)
+		navView.setupWithNavController(navController)
+	}
+
+	override fun onCreateOptionsMenu(menu: Menu): Boolean {
+		menuInflater.inflate(R.menu.main, menu)
+		return true
+	}
+
+	override fun onOptionsItemSelected(item: MenuItem): Boolean {
+		when (item.itemId) {
+			R.id.action_about -> showAboutDialog()
+			R.id.action_settings -> showSettingsDialog()
+		}
+		return super.onOptionsItemSelected(item)
+	}
+
+	override fun onSupportNavigateUp(): Boolean {
+		val navController = findNavController(R.id.nav_host_fragment)
+		return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+	}
+
+	fun getResourceAudio(): Int {
+		val audios = resources.obtainTypedArray(R.array.audios)
+		try {
+			val choice = (Math.random() * audios.length()).toInt()
+			return audios.getResourceId(choice, R.raw.family)
+		}
+		finally {
+		    audios.recycle()
+		}
+	}
+
+	private fun showAboutDialog() {
+		AlertDialog.Builder(this).apply {
+			setTitle(R.string.app_name)
+			setMessage(R.string.developer)
+			setPositiveButton(R.string.ok_button) { dialog, _ -> dialog.dismiss() }
+			create().apply { show() }
+		}
+	}
+
+	private fun showSettingsDialog() {
+		val builder = AlertDialog.Builder(this)
+		builder.setTitle(getString(R.string.change_theme))
+		val styles = arrayOf("Claro", "Oscuro", "Definido por Android")
+		val checkedItem = 0
+
+		builder.setSingleChoiceItems(styles, checkedItem) { dialog, which ->
+			when (which) {
+				0 -> {
+
+				}
+				1 -> {
+
+				}
+				2 -> {
+
+				}
+			}
+			delegate.applyDayNight()
+			dialog.dismiss()
+		}
+		val dialog = builder.create()
+		dialog.show()
+	}
+}

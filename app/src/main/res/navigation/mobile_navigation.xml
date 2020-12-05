@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="drm.ezenglish.views.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_listening"
+        android:name="drm.ezenglish.views.ListeningFragment"
+        android:label="@string/menu_listening"
+        tools:layout="@layout/fragment_listening" />
+
+    <fragment
+        android:id="@+id/nav_speaking"
+        android:name="drm.ezenglish.views.SpeakingFragment"
+        android:label="@string/menu_speaking"
+        tools:layout="@layout/fragment_speaking" />
+
+    <fragment
+        android:id="@+id/nav_writing"
+        android:name="drm.ezenglish.views.WritingFragment"
+        android:label="@string/menu_writing"
+        tools:layout="@layout/fragment_writing" />
+</navigation>

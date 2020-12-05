@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="audios">
+        <item>@raw/books</item>
+        <item>@raw/family</item>
+        <item>@raw/restaurant</item>
+    </integer-array>
+</resources>
