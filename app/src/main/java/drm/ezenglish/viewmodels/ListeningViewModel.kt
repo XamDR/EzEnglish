@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-//import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
 import drm.ezenglish.App
 import drm.ezenglish.entities.ListeningQuestion
@@ -15,19 +14,6 @@ class ListeningViewModel(private val app: App, resourceId: Int) : AndroidViewMod
 
     private val player: MediaPlayer = MediaPlayer.create(app, resourceId)
     private lateinit var timer: Timer
-//    private var dbReference: DatabaseReference
-//    private lateinit var firebaseDatabase: FirebaseDatabase
-//
-//    init {
-//        dbReference = FirebaseDatabase.getInstance().reference
-//        initFirebase()
-//    }
-//
-//    private fun initFirebase() {
-//        FirebaseApp.initializeApp(app)
-//        firebaseDatabase = FirebaseDatabase.getInstance()
-//        dbReference = firebaseDatabase.reference
-//    }
 
     val isPlaying: LiveData<Boolean>
         get() = _isPlaying

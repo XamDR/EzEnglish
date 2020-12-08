@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity() {
 		setupActionBarWithNavController(navController, appBarConfiguration)
 		navView.setupWithNavController(navController)
 
-		dbReference = FirebaseDatabase.getInstance().reference
 		initFirebase()
 	}
 

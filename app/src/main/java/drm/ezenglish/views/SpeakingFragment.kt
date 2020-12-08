@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import drm.ezenglish.App
 import drm.ezenglish.R
+import drm.ezenglish.activities.MainActivity
 import drm.ezenglish.databinding.FragmentSpeakingBinding
 import drm.ezenglish.viewmodels.SpeakingViewModel
 
@@ -21,7 +22,8 @@ class SpeakingFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = SpeakingViewModel(requireActivity().application as App)
+        val mainActivity = activity as MainActivity
+        viewModel = SpeakingViewModel(mainActivity.application as App)
         binding.viewModel = viewModel
         viewModel.permissionToRecordAudio.observe(viewLifecycleOwner, {
             if (!it) {
@@ -29,6 +31,7 @@ class SpeakingFragment : Fragment() {
                 ActivityCompat.requestPermissions(requireActivity(), permissions, REQUEST_RECORD_AUDIO_PERMISSION)
             }
         })
+        viewModel.getTextFromFirebase(mainActivity.dbReference)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

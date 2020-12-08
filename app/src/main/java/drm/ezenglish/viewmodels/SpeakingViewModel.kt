@@ -12,6 +12,10 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import drm.ezenglish.App
 import drm.ezenglish.entities.Speech
 import drm.ezenglish.util.TTSManager
@@ -21,11 +25,11 @@ class SpeakingViewModel(private val app: App) : AndroidViewModel(app), Recogniti
 
     val speech: LiveData<Speech>
         get() = _speech
-    private val _speech = MutableLiveData(Speech())
+    private val _speech = MutableLiveData<Speech>()
 
     val permissionToRecordAudio = MutableLiveData(checkAudioRecordingPermission(context = app))
 
-    private val isListening = speech.value?.isListening ?: false
+    private val isListening = _speech.value?.isListening ?: false
 
     private val recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
         putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
@@ -52,10 +56,25 @@ class SpeakingViewModel(private val app: App) : AndroidViewModel(app), Recogniti
     }
 
     fun speakText() {
-        speech.value?.text?.let { ttsManager.speak(it, true) }
+        _speech.value?.text?.let { ttsManager.speak(it, true) }
     }
 
     fun cleanUp() = ttsManager.shutDown()
+
+    fun getTextFromFirebase(dbReference: DatabaseReference) {
+        dbReference.child("speech").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val text = snapshot.children.toList().random().getValue(String::class.java)
+
+                    if (text != null) {
+                        _speech.value = Speech(text)
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) { }
+        })
+    }
 
     private fun startListening() {
         speechRecognizer.startListening(recognizerIntent)
