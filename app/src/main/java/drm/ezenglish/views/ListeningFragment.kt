@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.database.DatabaseReference
 import drm.ezenglish.App
 import drm.ezenglish.R
 import drm.ezenglish.activities.MainActivity
@@ -16,15 +17,17 @@ import drm.ezenglish.databinding.FragmentListeningBinding
 import drm.ezenglish.viewmodels.ListeningViewModel
 
 class ListeningFragment : Fragment() {
+
     private lateinit var viewModel: ListeningViewModel
     private lateinit var binding: FragmentListeningBinding
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val resourceId = (activity as MainActivity).getResourceAudio()
-        viewModel = ListeningViewModel(requireActivity().application as App, resourceId)
+        val mainActivity = activity as MainActivity
+        val resourceId = mainActivity.getResourceAudio()
+        viewModel = ListeningViewModel(mainActivity.application as App, resourceId)
         binding.viewModel = viewModel
-        bindAdapter(resourceId)
+        bindAdapter(mainActivity.dbReference, resourceId)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -44,17 +47,17 @@ class ListeningFragment : Fragment() {
         viewModel.cleanUp()
     }
 
-    private fun bindAdapter(resourceId: Int) {
+    private fun bindAdapter(dbReference: DatabaseReference, resourceId: Int) {
         when (resourceId) {
-            R.raw.books -> viewModel.getQuestionsFromFirebase("books") {
+            R.raw.books -> viewModel.getQuestionsFromFirebase(dbReference,"books") {
                 viewModel.questions.value = it
                 binding.rvListeningQuestions.adapter = QuestionListeningAdapter(this, viewModel.questions.value!!)
             }
-            R.raw.family -> viewModel.getQuestionsFromFirebase("family") {
+            R.raw.family -> viewModel.getQuestionsFromFirebase(dbReference,"family") {
                 viewModel.questions.value = it
                 binding.rvListeningQuestions.adapter = QuestionListeningAdapter(this, viewModel.questions.value!!)
             }
-            R.raw.restaurant -> viewModel.getQuestionsFromFirebase("restaurant") {
+            R.raw.restaurant -> viewModel.getQuestionsFromFirebase(dbReference,"restaurant") {
                 viewModel.questions.value = it
                 binding.rvListeningQuestions.adapter = QuestionListeningAdapter(this, viewModel.questions.value!!)
             }

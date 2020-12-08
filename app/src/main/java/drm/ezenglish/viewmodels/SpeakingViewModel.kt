@@ -1,0 +1,119 @@
+package drm.ezenglish.viewmodels
+
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer.*
+import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import drm.ezenglish.App
+import drm.ezenglish.entities.Speech
+import drm.ezenglish.util.TTSManager
+import java.util.*
+
+class SpeakingViewModel(private val app: App) : AndroidViewModel(app), RecognitionListener {
+
+    val speech: LiveData<Speech>
+        get() = _speech
+    private val _speech = MutableLiveData(Speech())
+
+    val permissionToRecordAudio = MutableLiveData(checkAudioRecordingPermission(context = app))
+
+    private val isListening = speech.value?.isListening ?: false
+
+    private val recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+        putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+        putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
+    }
+
+    private val speechRecognizer = createSpeechRecognizer(app).apply {
+        setRecognitionListener(this@SpeakingViewModel)
+    }
+
+    private val ttsManager = TTSManager(app).apply {
+        init()
+    }
+
+    fun recordSpeech() {
+        if (isListening) {
+            stopListening()
+            Toast.makeText(app, "Grabación finalizada", Toast.LENGTH_SHORT).show()
+        }
+        else {
+            startListening()
+        }
+    }
+
+    fun speakText() {
+        speech.value?.text?.let { ttsManager.speak(it, true) }
+    }
+
+    fun cleanUp() = ttsManager.shutDown()
+
+    private fun startListening() {
+        speechRecognizer.startListening(recognizerIntent)
+        notifyListening(true)
+        Toast.makeText(app, "Grabación iniciada", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun stopListening() {
+        speechRecognizer.stopListening()
+        notifyListening(false)
+    }
+
+    private fun checkAudioRecordingPermission(context: App) =
+        ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+
+    private fun notifyListening(isRecording: Boolean) {
+        _speech.value = _speech.value?.copy(isListening = isRecording)
+    }
+
+    private fun updateResults(speechBundle: Bundle?) {
+        val userSaid = speechBundle?.getStringArrayList(RESULTS_RECOGNITION)
+        _speech.value = _speech.value?.copy(userSaid = userSaid?.get(0) ?: "")
+    }
+
+    override fun onEndOfSpeech() {
+        notifyListening(false)
+    }
+
+    override fun onError(error: Int) {
+        _speech.value = _speech.value?.copy(error = when (error) {
+            ERROR_AUDIO -> "Error de audio"
+            ERROR_CLIENT -> "Error del cliente"
+            ERROR_INSUFFICIENT_PERMISSIONS -> "Error de permisos"
+            ERROR_NETWORK -> "Error de red"
+            ERROR_NETWORK_TIMEOUT -> "Error de tiempo agotado en la red"
+            ERROR_NO_MATCH -> "Error de match"
+            ERROR_RECOGNIZER_BUSY -> "Error de disponibilidad"
+            ERROR_SERVER -> "Error de servidor"
+            ERROR_SPEECH_TIMEOUT -> "Error de tiempo agotado"
+            else -> "Error desconocido"
+        })
+    }
+
+    override fun onResults(results: Bundle?) {
+        updateResults(results)
+    }
+
+    override fun onPartialResults(partialResults: Bundle?) {
+        updateResults(partialResults)
+    }
+
+    override fun onReadyForSpeech(params: Bundle?) { }
+
+    override fun onBeginningOfSpeech() { }
+
+    override fun onRmsChanged(rmsdB: Float) { }
+
+    override fun onBufferReceived(buffer: ByteArray?) { }
+
+    override fun onEvent(eventType: Int, params: Bundle?) { }
+}

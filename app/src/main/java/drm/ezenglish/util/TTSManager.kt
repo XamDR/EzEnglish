@@ -1,10 +1,8 @@
 package drm.ezenglish.util
 
 import android.content.Context
-import android.os.Build
 import android.speech.tts.TextToSpeech
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import java.util.*
 
 class TTSManager(private val context: Context) {
@@ -19,7 +17,6 @@ class TTSManager(private val context: Context) {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun speak(text: String, isInitial: Boolean) {
         if (isInitial) {
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null)

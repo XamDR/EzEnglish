@@ -1,42 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/primaryColor"
-    tools:context=".views.SpeakingFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
+    <data>
+        <variable
+            name="viewModel"
+            type="drm.ezenglish.viewmodels.SpeakingViewModel" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:textSize="20sp"
-        android:textColor="@color/primaryTextColor"
-        android:gravity="center|top"
-        android:text="@string/fragment_speaking_title" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:text="DEMO"
-        android:textColor="@color/primaryTextColor"
-        tools:ignore="HardcodedText" />
-
-    <ImageButton
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         android:background="@color/primaryColor"
-        android:contentDescription="@string/btn_micro_desc"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_mic"
-        android:tint="@color/primaryTextColor" />
+        tools:context=".views.SpeakingFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textSize="20sp"
+            android:textColor="@color/primaryTextColor"
+            android:gravity="center|top"
+            android:text="@string/fragment_speaking_title" />
 
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="16sp"
+            android:singleLine="false"
+            android:scrollbars="vertical"
+            android:text="@{viewModel.speech.text}"
+            tools:text="DEMO" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="20dp"
+                android:background="@color/primaryColor"
+                android:contentDescription="@string/btn_micro_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_mic"
+                android:tint="@color/primaryTextColor"
+                android:onClick="@{() -> viewModel.recordSpeech()}"/>
+
+            <ImageButton
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="20dp"
+                android:background="@color/primaryColor"
+                android:contentDescription="@string/btn_micro_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_speaker"
+                android:tint="@color/primaryTextColor"
+                android:onClick="@{() -> viewModel.speakText()}"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="20sp"
+            android:singleLine="false"
+            android:scrollbars="vertical"
+            android:text="@string/show_pronunciation"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="16sp"
+            android:singleLine="false"
+            android:scrollbars="vertical"
+            android:text='@{viewModel.speech.userSaid}'
+            tools:text="Result" />
+
+    </LinearLayout>
+</layout>

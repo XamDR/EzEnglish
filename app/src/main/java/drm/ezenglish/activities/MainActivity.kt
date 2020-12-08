@@ -13,10 +13,15 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.FirebaseApp
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import drm.ezenglish.R
 
 class MainActivity : AppCompatActivity() {
 
+	lateinit var dbReference: DatabaseReference
+	private lateinit var firebaseDatabase: FirebaseDatabase
 	private lateinit var appBarConfiguration: AppBarConfiguration
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +40,15 @@ class MainActivity : AppCompatActivity() {
 		)
 		setupActionBarWithNavController(navController, appBarConfiguration)
 		navView.setupWithNavController(navController)
+
+		dbReference = FirebaseDatabase.getInstance().reference
+		initFirebase()
+	}
+
+	private fun initFirebase() {
+		FirebaseApp.initializeApp(application)
+		firebaseDatabase = FirebaseDatabase.getInstance()
+		dbReference = firebaseDatabase.reference
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu): Boolean {

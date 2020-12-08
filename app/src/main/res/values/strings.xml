@@ -27,5 +27,6 @@
     <string name="ok_button">Aceptar</string>
     <string name="change_theme">Cambiar tema</string>
     <string name="show_score">Ver Puntaje</string>
+    <string name="show_pronunciation">Pronunciación</string>
 
 </resources>
