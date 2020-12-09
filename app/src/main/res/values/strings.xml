@@ -18,8 +18,8 @@
     <string name="btn_desc">play audio</string>
     <string name="fragment_speaking_title">Texto a pronunciar</string>
     <string name="btn_micro_desc">micro</string>
-    <string name="fragment_writing_title">Lectura</string>
-    <string name="questions">Preguntas</string>
+    <string name="fragment_writing_title">Escritura</string>
+    <string name="questions">Escribe aquí un párrafo de al menos 100 palabras.</string>
     <string name="fragment_home_title">EzEnglish</string>
     <string name="fragment_home_subtitle">Aprende inglés de forma\n fácil y divertida</string>
     <string name="fragment_footer_text">Practica listening, speaking y writing\n mediante diferentes quizzes.</string>
@@ -28,5 +28,8 @@
     <string name="change_theme">Cambiar tema</string>
     <string name="show_score">Ver Puntaje</string>
     <string name="show_pronunciation">Pronunciación</string>
+    <string name="pick_topic">Escoge un tema</string>
+    <string name="placeholder">Escribe aquí…</string>
+    <string name="save_paragraph">Guardar párrafo</string>
 
 </resources>

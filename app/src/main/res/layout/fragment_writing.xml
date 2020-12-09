@@ -1,35 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/primaryColor"
-    tools:context=".views.WritingFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
+    <data>
+        <variable
+            name="viewModel"
+            type="drm.ezenglish.viewmodels.WritingViewModel" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:textSize="20sp"
-        android:textColor="@color/primaryTextColor"
-        android:gravity="center|top"
-        android:text="@string/fragment_writing_title" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/primaryColor"
+        tools:context=".views.WritingFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:text="DEMO"
-        android:textColor="@color/primaryTextColor"
-        tools:ignore="HardcodedText" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textSize="20sp"
+            android:textColor="@color/primaryTextColor"
+            android:gravity="center|top"
+            android:text="@string/fragment_writing_title" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:text="@string/questions"
-        android:textColor="@color/primaryTextColor"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/primaryTextColor"
+            android:text="@string/pick_topic" />
 
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="@color/accentColor"
+            android:entries="@array/topic_choices"
+            android:theme="@style/Spinner"/>
 
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/questions"
+            android:textColor="@color/primaryTextColor" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:layout_margin="10dp"
+            android:gravity="top|start"
+            android:inputType="textMultiLine|textCapSentences|textFilter|textNoSuggestions"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="vertical"
+            android:scrollHorizontally="false"
+            android:background="@null"
+            android:hint="@string/placeholder"
+            android:textColorHint="@color/accentColor"
+            android:importantForAutofill="no" />
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center|bottom"
+            android:gravity="center"
+            android:text="@string/save_paragraph"
+            android:backgroundTint="@color/accentColor"
+            android:textColor="@color/primaryTextColor"
+            android:onClick="@{() -> viewModel.saveParagraph()}"/>
+    </LinearLayout>
+</layout>
