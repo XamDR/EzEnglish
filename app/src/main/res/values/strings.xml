@@ -31,7 +31,7 @@
     <string name="pick_topic">Escoge un tema</string>
     <string name="placeholder">Escribe aquí…</string>
     <string name="save_paragraph">Guardar párrafo</string>
-    <string name="instructions">Instrucciones: Completa los espacios en blanco.</string>
+    <string name="instructions">Instrucciones:\n1.Selecciona un tema.\n2.Completa los espacios en blanco</string>
     <string name="show_answers">Mostrar respuestas</string>
 
 </resources>

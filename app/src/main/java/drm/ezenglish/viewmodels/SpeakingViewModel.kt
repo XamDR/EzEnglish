@@ -46,11 +46,7 @@ class SpeakingViewModel(private val app: App) : AndroidViewModel(app), Recogniti
     }
 
     fun recordSpeech() {
-        if (isListening) {
-            stopListening()
-            Toast.makeText(app, "Grabación finalizada", Toast.LENGTH_SHORT).show()
-        }
-        else {
+        if (!isListening) {
             startListening()
         }
     }
@@ -79,12 +75,6 @@ class SpeakingViewModel(private val app: App) : AndroidViewModel(app), Recogniti
     private fun startListening() {
         speechRecognizer.startListening(recognizerIntent)
         notifyListening(true)
-        Toast.makeText(app, "Grabación iniciada", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun stopListening() {
-        speechRecognizer.stopListening()
-        notifyListening(false)
     }
 
     private fun checkAudioRecordingPermission(context: App) =
@@ -99,12 +89,18 @@ class SpeakingViewModel(private val app: App) : AndroidViewModel(app), Recogniti
         _speech.value = _speech.value?.copy(userSaid = userSaid?.get(0) ?: "")
     }
 
+    override fun onBeginningOfSpeech() {
+        notifyListening(true)
+        Toast.makeText(app, "Grabación iniciada", Toast.LENGTH_SHORT).show()
+    }
+
     override fun onEndOfSpeech() {
         notifyListening(false)
+        Toast.makeText(app, "Grabación finalizada", Toast.LENGTH_SHORT).show()
     }
 
     override fun onError(error: Int) {
-        _speech.value = _speech.value?.copy(error = when (error) {
+         val message = when (error) {
             ERROR_AUDIO -> "Error de audio"
             ERROR_CLIENT -> "Error del cliente"
             ERROR_INSUFFICIENT_PERMISSIONS -> "Error de permisos"
@@ -115,7 +111,8 @@ class SpeakingViewModel(private val app: App) : AndroidViewModel(app), Recogniti
             ERROR_SERVER -> "Error de servidor"
             ERROR_SPEECH_TIMEOUT -> "Error de tiempo agotado"
             else -> "Error desconocido"
-        })
+        }
+        Toast.makeText(app, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onResults(results: Bundle?) {
@@ -127,8 +124,6 @@ class SpeakingViewModel(private val app: App) : AndroidViewModel(app), Recogniti
     }
 
     override fun onReadyForSpeech(params: Bundle?) { }
-
-    override fun onBeginningOfSpeech() { }
 
     override fun onRmsChanged(rmsdB: Float) { }
 
