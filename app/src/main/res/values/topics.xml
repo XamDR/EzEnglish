@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="topic_choices">
-        <item>Movies</item>
-        <item>Music</item>
-        <item>Sports</item>
-    </string-array>
-</resources>

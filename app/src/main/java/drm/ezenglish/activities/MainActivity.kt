@@ -19,12 +19,14 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import drm.ezenglish.R
 import drm.ezenglish.util.UserPreferences
+import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
 
 	lateinit var dbReference: DatabaseReference
 	private lateinit var firebaseDatabase: FirebaseDatabase
 	private lateinit var appBarConfiguration: AppBarConfiguration
+	private var checkedTheme by Delegates.notNull<Int>()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -44,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 		navView.setupWithNavController(navController)
 
 		initFirebase()
-		checkTheme()
+		checkedTheme = checkTheme()
 	}
 
 	private fun initFirebase() {
@@ -95,23 +97,24 @@ class MainActivity : AppCompatActivity() {
 		val builder = AlertDialog.Builder(this)
 		builder.setTitle(getString(R.string.change_theme))
 		val styles = arrayOf("Claro", "Oscuro", "Definido por Android")
-		val checkedItem = 0
+		val checkedItem = checkedTheme
 
 		builder.setSingleChoiceItems(styles, checkedItem) { dialog, which ->
 			when (which) {
 				0 -> {
 					AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-					UserPreferences(this).darkMode = 0
+					UserPreferences(this).appTheme = 0
 				}
 				1 -> {
 					AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-					UserPreferences(this).darkMode = 1
+					UserPreferences(this).appTheme = 1
 				}
 				2 -> {
 					AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-					UserPreferences(this).darkMode = 2
+					UserPreferences(this).appTheme = 2
 				}
 			}
+			checkedTheme = which
 			delegate.applyDayNight()
 			dialog.dismiss()
 		}
@@ -119,12 +122,14 @@ class MainActivity : AppCompatActivity() {
 		dialog.show()
 	}
 
-	private fun checkTheme() {
-		when (UserPreferences(this).darkMode) {
+	private fun checkTheme(): Int {
+		val theme = UserPreferences(this).appTheme
+		when (theme) {
 			0 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 			1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 			2 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
 		}
 		delegate.applyDayNight()
+		return theme
 	}
 }

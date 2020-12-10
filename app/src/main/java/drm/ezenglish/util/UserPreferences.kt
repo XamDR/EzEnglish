@@ -11,6 +11,6 @@ class UserPreferences(context: Context?) {
 
     private val preferences = PreferenceManager.getDefaultSharedPreferences(context)
 
-    var darkMode = preferences.getInt(DARK_STATUS, 0)
+    var appTheme = preferences.getInt(DARK_STATUS, 0)
         set(value) = preferences.edit().putInt(DARK_STATUS, value).apply()
 }
