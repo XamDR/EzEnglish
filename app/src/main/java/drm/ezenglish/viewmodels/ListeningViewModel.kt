@@ -40,11 +40,6 @@ class ListeningViewModel(private val app: App, resourceId: Int) : AndroidViewMod
         currentPosition.value?.let { player.seekTo(it) }
     }
 
-//    fun showScore() {
-//        val score = questions.value?.filter { q -> q.answer == "" }?.size
-//        Toast.makeText(app, "Score: $score", Toast.LENGTH_SHORT).show()
-//    }
-
     fun cleanUp () = player.release()
 
     fun getQuestionsFromFirebase(dbReference: DatabaseReference, path: String, callback: (List<Question>) -> Unit) {

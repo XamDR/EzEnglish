@@ -31,6 +31,7 @@
             android:text="@string/instructions"/>
 
         <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/topics"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -38,8 +39,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
             android:backgroundTint="@color/accentColor"
-            android:theme="@style/Spinner"
-            android:entries="@array/topics"/>
+            android:theme="@style/Spinner"/>
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
