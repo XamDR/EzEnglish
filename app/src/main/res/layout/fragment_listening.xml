@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="drm.ezenglish.util.Converter"/>
         <variable
@@ -20,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:textSize="20sp"
+            android:textSize="24sp"
             android:textColor="@color/primaryTextColor"
             android:gravity="center|top"
             android:text="@string/fragment_listening_title" />
@@ -74,39 +72,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="10dp"
             android:layout_marginEnd="5dp"
+            android:textSize="16sp"
             android:text="@string/questions"
-            android:textColor="@color/primaryTextColor" />
+            android:textColor="@color/primaryTextColor"/>
 
-        <ScrollView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvListeningQuestions"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvListeningQuestions"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="5dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_gravity="center|bottom"
-                    android:gravity="center"
-                    android:text="@string/show_score"
-                    android:backgroundTint="@color/accentColor"
-                    android:textColor="@color/primaryTextColor"/>
-            </LinearLayout>
-        </ScrollView>
-
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"/>
     </LinearLayout>
 </layout>

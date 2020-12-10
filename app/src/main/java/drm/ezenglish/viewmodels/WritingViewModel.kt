@@ -19,7 +19,8 @@ class WritingViewModel {
                     val sentence = randomChild.child("content").getValue(String::class.java)
                     val genericTypeIndicator = object : GenericTypeIndicator<ArrayList<Int>>() {}
                     val ranges = randomChild.children.filter { c -> c.key != "content" }
-                        .map { c -> c.getValue(genericTypeIndicator) as ArrayList<Int> }.map { a -> SelectionRange(a[0], a[1]) }
+                        .map { c -> c.getValue(genericTypeIndicator) as ArrayList<Int> }
+                        .map { a -> SelectionRange(a[0], a[1]) }
 
                     if (sentence != null) {
                         quiz.value = Quiz(sentence, ranges)
@@ -27,7 +28,6 @@ class WritingViewModel {
                     callback(quiz.value!!)
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {}
         })
     }
@@ -36,12 +36,12 @@ class WritingViewModel {
         val builder = StringBuilder(quiz.content)
 
         for (i in quiz.ranges.size - 1 downTo 0) {
-            builder.removeRange(quiz.ranges[i].start, quiz.ranges[i].start + quiz.ranges[i].length)
+            builder.removeRange(quiz.ranges[i].start, quiz.ranges[i].start + quiz.ranges[i].length - 1)
             val length = quiz.ranges[i].length
             val replacement = """<input id=""q${i}""
-                type =""text"" class = ""editable""
-                maxlength=""$length"" 
-                style =""width: ${ length * 1.162 } ch;""/>
+                type="text" class= "editable"
+                maxlength="$length" 
+                style ="width: ${ length * 1.162 } ch;"/>
             """.trimIndent()
             builder.insert(quiz.ranges[i].start, replacement)
         }

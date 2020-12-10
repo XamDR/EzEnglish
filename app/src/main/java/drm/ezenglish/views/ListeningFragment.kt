@@ -51,15 +51,18 @@ class ListeningFragment : Fragment() {
         when (resourceId) {
             R.raw.books -> viewModel.getQuestionsFromFirebase(dbReference,"books") {
                 viewModel.questions.value = it
-                binding.rvListeningQuestions.adapter = QuestionListeningAdapter(this, viewModel.questions.value!!)
+                binding.rvListeningQuestions.adapter = QuestionListeningAdapter(this.activity?.application as App,
+                                                                    this, viewModel.questions.value!!)
             }
             R.raw.family -> viewModel.getQuestionsFromFirebase(dbReference,"family") {
                 viewModel.questions.value = it
-                binding.rvListeningQuestions.adapter = QuestionListeningAdapter(this, viewModel.questions.value!!)
+                binding.rvListeningQuestions.adapter = QuestionListeningAdapter(this.activity?.application as App,
+                                                                    this, viewModel.questions.value!!)
             }
             R.raw.restaurant -> viewModel.getQuestionsFromFirebase(dbReference,"restaurant") {
                 viewModel.questions.value = it
-                binding.rvListeningQuestions.adapter = QuestionListeningAdapter(this, viewModel.questions.value!!)
+                binding.rvListeningQuestions.adapter = QuestionListeningAdapter(this.activity?.application as App,
+                                                                    this, viewModel.questions.value!!)
             }
         }
     }

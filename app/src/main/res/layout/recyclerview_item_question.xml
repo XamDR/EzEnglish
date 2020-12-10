@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-
     <data>
         <variable
             name="viewModel"
@@ -18,40 +17,45 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:textColor="@color/primaryTextColor"
-            android:text="@{viewModel.question.text}" />
+            android:text="@{viewModel.question.content}"/>
 
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp">
+            android:layout_margin="5dp"
+            android:onCheckedChanged="@{viewModel.onSelectedAnswer}">
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/accentColor"
                 android:textColor="@color/primaryTextColor"
-                android:text="@{viewModel.question.optionA}" />
+                android:text="@{viewModel.question.optionA}"
+                android:tag="@{viewModel.question.answer}"/>
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/accentColor"
                 android:textColor="@color/primaryTextColor"
-                android:text="@{viewModel.question.optionB}" />
+                android:text="@{viewModel.question.optionB}"
+                android:tag="@{viewModel.question.answer}"/>
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/accentColor"
                 android:textColor="@color/primaryTextColor"
-                android:text="@{viewModel.question.optionC}" />
+                android:text="@{viewModel.question.optionC}"
+                android:tag="@{viewModel.question.answer}"/>
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/accentColor"
                 android:textColor="@color/primaryTextColor"
-                android:text="@{viewModel.question.optionD}" />
+                android:text="@{viewModel.question.optionD}"
+                android:tag="@{viewModel.question.answer}"/>
         </RadioGroup>
     </LinearLayout>
 </layout>

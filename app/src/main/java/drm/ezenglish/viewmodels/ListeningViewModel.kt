@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.*
 import drm.ezenglish.App
-import drm.ezenglish.entities.ListeningQuestion
+import drm.ezenglish.entities.Question
 import java.util.*
 
 class ListeningViewModel(private val app: App, resourceId: Int) : AndroidViewModel(app) {
@@ -25,7 +25,7 @@ class ListeningViewModel(private val app: App, resourceId: Int) : AndroidViewMod
 
     val currentPosition = MutableLiveData(0)
 
-    val questions = MutableLiveData(emptyList<ListeningQuestion>())
+    val questions = MutableLiveData(emptyList<Question>())
 
     fun toggleAudio() {
         if (_isPlaying.value!!) {
@@ -40,20 +40,19 @@ class ListeningViewModel(private val app: App, resourceId: Int) : AndroidViewMod
         currentPosition.value?.let { player.seekTo(it) }
     }
 
+//    fun showScore() {
+//        val score = questions.value?.filter { q -> q.answer == "" }?.size
+//        Toast.makeText(app, "Score: $score", Toast.LENGTH_SHORT).show()
+//    }
+
     fun cleanUp () = player.release()
 
-    fun getQuestionsFromFirebase(dbReference: DatabaseReference, path: String, callback: (List<ListeningQuestion>) -> Unit) {
-        val questions = mutableListOf<ListeningQuestion>()
+    fun getQuestionsFromFirebase(dbReference: DatabaseReference, path: String, callback: (List<Question>) -> Unit) {
+        val questions = mutableListOf<Question>()
         dbReference.child(path).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    for (child in snapshot.children) {
-                        val question = child.getValue(ListeningQuestion::class.java)
-
-                        if (question != null) {
-                            questions.add(question)
-                        }
-                    }
+                    snapshot.children.forEach { c -> c.getValue(Question::class.java)?.let { questions.add(it) } }
                     callback(questions)
                 }
             }

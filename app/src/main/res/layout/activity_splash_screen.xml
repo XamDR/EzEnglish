@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/deg_splash">
 
     <ImageView
@@ -11,13 +12,16 @@
         android:layout_gravity="center|bottom"
         android:layout_marginBottom="40dp"
         android:contentDescription="@string/logo_desc"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/ic_launcher"
+        app:tint="@color/primaryTextColor"/>
+
     <TextView
         android:id="@+id/textLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/launcher_title"
-        android:textColor="@color/primaryLightColor"
+        android:textColor="@color/accentColor"
+        android:textStyle="bold"
         android:textSize="40sp"
         android:layout_marginTop="40dp"
         android:padding="10dp"
