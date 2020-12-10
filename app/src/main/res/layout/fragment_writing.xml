@@ -41,7 +41,8 @@
             android:gravity="center"
             android:text="@string/show_answers"
             android:backgroundTint="@color/accentColor"
-            android:textColor="@color/primaryTextColor"/>
+            android:textColor="@color/primaryTextColor"
+            android:onClick="@{() -> viewModel.showAnswers()}"/>
 
         <WebView
             android:id="@+id/webView"

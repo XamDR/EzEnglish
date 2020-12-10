@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -17,6 +18,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import drm.ezenglish.R
+import drm.ezenglish.util.UserPreferences
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,6 +44,7 @@ class MainActivity : AppCompatActivity() {
 		navView.setupWithNavController(navController)
 
 		initFirebase()
+		checkTheme()
 	}
 
 	private fun initFirebase() {
@@ -80,7 +83,7 @@ class MainActivity : AppCompatActivity() {
 	}
 
 	private fun showAboutDialog() {
-		AlertDialog.Builder(this).apply {
+		AlertDialog.Builder(this, R.style.DialogTheme).apply {
 			setTitle(R.string.app_name)
 			setMessage(R.string.developer)
 			setPositiveButton(R.string.ok_button) { dialog, _ -> dialog.dismiss() }
@@ -97,13 +100,16 @@ class MainActivity : AppCompatActivity() {
 		builder.setSingleChoiceItems(styles, checkedItem) { dialog, which ->
 			when (which) {
 				0 -> {
-
+					AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+					UserPreferences(this).darkMode = 0
 				}
 				1 -> {
-
+					AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+					UserPreferences(this).darkMode = 1
 				}
 				2 -> {
-
+					AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+					UserPreferences(this).darkMode = 2
 				}
 			}
 			delegate.applyDayNight()
@@ -111,5 +117,14 @@ class MainActivity : AppCompatActivity() {
 		}
 		val dialog = builder.create()
 		dialog.show()
+	}
+
+	private fun checkTheme() {
+		when (UserPreferences(this).darkMode) {
+			0 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+			1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+			2 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+		}
+		delegate.applyDayNight()
 	}
 }

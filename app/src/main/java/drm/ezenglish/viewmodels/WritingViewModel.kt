@@ -1,12 +1,15 @@
 package drm.ezenglish.viewmodels
 
+import android.widget.Toast
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.*
+import drm.ezenglish.App
 import drm.ezenglish.entities.Quiz
 import drm.ezenglish.entities.SelectionRange
 import drm.ezenglish.util.template
 
-class WritingViewModel {
+class WritingViewModel(private val app: App) : AndroidViewModel(app) {
 
     private val quiz = MutableLiveData<Quiz>()
 
@@ -36,9 +39,9 @@ class WritingViewModel {
         val builder = StringBuilder(quiz.content)
 
         for (i in quiz.ranges.size - 1 downTo 0) {
-            builder.removeRange(quiz.ranges[i].start, quiz.ranges[i].start + quiz.ranges[i].length - 1)
+            builder.deleteRange(quiz.ranges[i].start, quiz.ranges[i].start + quiz.ranges[i].length)
             val length = quiz.ranges[i].length
-            val replacement = """<input id=""q${i}""
+            val replacement = """<input id=""q$i""
                 type="text" class= "editable"
                 maxlength="$length" 
                 style ="width: ${ length * 1.162 } ch;"/>
@@ -47,4 +50,6 @@ class WritingViewModel {
         }
         return String.format(template, builder)
     }
+
+    fun showAnswers() = Toast.makeText(app, "Falta implementar!!!", Toast.LENGTH_SHORT).show()
 }

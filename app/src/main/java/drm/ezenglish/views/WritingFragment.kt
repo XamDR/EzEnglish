@@ -3,12 +3,13 @@ package drm.ezenglish.views
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebViewClient
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import drm.ezenglish.App
 import drm.ezenglish.R
 import drm.ezenglish.activities.MainActivity
 import drm.ezenglish.databinding.FragmentWritingBinding
@@ -24,7 +25,7 @@ class WritingFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val mainActivity = activity as MainActivity
-        viewModel = WritingViewModel()
+        viewModel = WritingViewModel(mainActivity.application as App)
         binding.viewModel = viewModel
         viewModel.getSentenceFromFirebase(mainActivity.dbReference) {
             val htmlData = viewModel.render(it).trimStart('\n')
