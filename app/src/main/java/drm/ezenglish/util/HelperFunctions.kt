@@ -1,17 +1,12 @@
 package drm.ezenglish.util
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
-import android.view.View
-import android.widget.RadioButton
-import android.widget.RadioGroup
 import androidx.databinding.BindingAdapter
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
-import java.lang.StringBuilder
-import java.util.*
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
+import drm.ezenglish.App
+import drm.ezenglish.adapters.QuestionAdapter
+import drm.ezenglish.entities.Question
 
 fun formatMillisecondsToString(milliseconds: Int): String {
     val buffer = StringBuffer()
@@ -42,5 +37,20 @@ object Converter {
 
     @JvmStatic fun setDuration(duration: Int): String {
         return " / ${formatMillisecondsToString(duration)}"
+    }
+}
+
+@BindingAdapter("dividerOrientation")
+fun setDivider(recyclerView: RecyclerView, orientation: Int) {
+    recyclerView.addItemDecoration(DividerItemDecoration(recyclerView.context, orientation))
+}
+
+@BindingAdapter("questions")
+fun setAdapter(recyclerView: RecyclerView, questions: List<Question>?) {
+    if (questions != null) {
+        recyclerView.adapter = QuestionAdapter(recyclerView.context.applicationContext as App, questions)
+    }
+    else {
+        recyclerView.adapter = null
     }
 }
