@@ -5,7 +5,10 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import drm.ezenglish.App
 import drm.ezenglish.entities.Question
 import java.util.*
@@ -42,13 +45,13 @@ class ListeningViewModel(private val app: App, resourceId: Int) : AndroidViewMod
 
     fun cleanUp () = player.release()
 
-    fun getQuestionsFromFirebase(dbReference: DatabaseReference, path: String, callback: (List<Question>) -> Unit) {
-        val questions = mutableListOf<Question>()
+    fun getQuestionsFromFirebase(dbReference: DatabaseReference, path: String) {
+        val repositoryQuestions = mutableListOf<Question>()
         dbReference.child(path).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    snapshot.children.forEach { c -> c.getValue(Question::class.java)?.let { questions.add(it) } }
-                    callback(questions)
+                    snapshot.children.forEach { c -> c.getValue(Question::class.java)?.let { repositoryQuestions.add(it) } }
+                    questions.value = repositoryQuestions
                 }
             }
             override fun onCancelled(error: DatabaseError) {}

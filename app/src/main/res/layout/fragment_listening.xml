@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="drm.ezenglish.util.Converter"/>
+        <import type="androidx.recyclerview.widget.LinearLayoutManager"/>
         <variable
             name="viewModel"
             type="drm.ezenglish.viewmodels.ListeningViewModel" />
@@ -79,9 +81,13 @@
             android:textColor="@color/primaryTextColor"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvListeningQuestions"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="vertical"
+            app:dividerOrientation="@{LinearLayoutManager.VERTICAL}"
+            app:questions="@{viewModel.questions}"
+            tools:listitem="@layout/recyclerview_item_question"/>
     </LinearLayout>
 </layout>

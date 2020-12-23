@@ -15,6 +15,7 @@ import drm.ezenglish.R
 import drm.ezenglish.activities.MainActivity
 import drm.ezenglish.adapters.TopicAdapter
 import drm.ezenglish.databinding.FragmentWritingBinding
+import drm.ezenglish.util.formatTopic
 import drm.ezenglish.viewmodels.WritingViewModel
 
 class WritingFragment : Fragment() {
@@ -36,7 +37,6 @@ class WritingFragment : Fragment() {
             }
             override fun onNothingSelected(parent: AdapterView<*>?) { }
         }
-        loadHtmlData(mainActivity, 0)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -50,14 +50,17 @@ class WritingFragment : Fragment() {
 
     private fun bindAdapter(mainActivity: MainActivity) {
         viewModel.getTopicsFromFirebase(mainActivity.dbReference) {
-            val adapter = TopicAdapter(mainActivity, android.R.layout.simple_spinner_dropdown_item, it)
+            viewModel.topics.value = it
+            val items = it.map { x -> x?.formatTopic() }
+            val adapter = TopicAdapter(mainActivity, android.R.layout.simple_spinner_dropdown_item, items)
             binding.topics.adapter = adapter
+            loadHtmlData(mainActivity, 0)
         }
     }
 
     private fun loadHtmlData(activity: MainActivity, position: Int) {
-        val topics = activity.resources.getStringArray(R.array.topics)
-        viewModel.getSentenceFromFirebase(activity.dbReference, topics[position]) {
+        val path = viewModel.topics.value?.get(position)!!
+        viewModel.getSentenceFromFirebase(activity.dbReference, path) {
             val htmlData = viewModel.render(it).trimStart('\n')
             binding.webView.loadDataWithBaseURL(null, htmlData, mimeType, encoding, null)
         }

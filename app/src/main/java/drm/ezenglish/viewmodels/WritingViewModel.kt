@@ -7,19 +7,20 @@ import com.google.firebase.database.*
 import drm.ezenglish.App
 import drm.ezenglish.entities.Quiz
 import drm.ezenglish.entities.SelectionRange
-import drm.ezenglish.util.formatTopic
 import drm.ezenglish.util.template
 
 class WritingViewModel(private val app: App) : AndroidViewModel(app) {
 
     private val quiz = MutableLiveData<Quiz>()
+    val topics = MutableLiveData(emptyList<String?>())
 
     fun getTopicsFromFirebase(dbReference: DatabaseReference, callback: (List<String?>) -> Unit) {
+
         dbReference.child("writing").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    val topics = snapshot.children.map { c -> c.key?.formatTopic() }
-                    callback(topics)
+                    val results = snapshot.children.map { c -> c.key }
+                    callback(results)
                 }
             }
             override fun onCancelled(error: DatabaseError) {}
