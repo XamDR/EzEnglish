@@ -33,7 +33,7 @@ class ListeningViewModel(private val app: App, storage: FirebaseStorage, dbRefer
 
     val duration: LiveData<Int>
         get() = _duration
-    private val _duration = MutableLiveData(player.duration)
+    private val _duration = MutableLiveData(0)
 
     val currentPosition = MutableLiveData(0)
 
@@ -81,6 +81,7 @@ class ListeningViewModel(private val app: App, storage: FirebaseStorage, dbRefer
     private fun playAudio() {
         player.start()
         _isPlaying.value = player.isPlaying
+        _duration.value = player.duration
 
         player.setOnCompletionListener {
             _isPlaying.value = it.isPlaying
