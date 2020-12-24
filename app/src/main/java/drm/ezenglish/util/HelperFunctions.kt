@@ -29,6 +29,11 @@ fun String.formatTopic(): String {
     return builder.toString()
 }
 
+fun String.getPathFromUrl(): String {
+    val url = this
+    return url.substringAfterLast("%2F").substringBefore('.')
+}
+
 @SuppressLint("SetTextI18n")
 object Converter {
     @JvmStatic fun setCurrentPosition(currentPosition: Int): String {
