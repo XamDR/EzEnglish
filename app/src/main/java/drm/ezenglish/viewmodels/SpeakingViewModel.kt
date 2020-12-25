@@ -16,6 +16,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
 import drm.ezenglish.App
 import drm.ezenglish.entities.Speech
 import drm.ezenglish.util.TTSManager
@@ -61,7 +62,7 @@ class SpeakingViewModel(private val app: App) : AndroidViewModel(app), Recogniti
         dbReference.child("speech").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    val text = snapshot.children.toList().random().getValue(String::class.java)
+                    val text = snapshot.children.toList().random().getValue<String>()
 
                     if (text != null) {
                         _speech.value = Speech(text)

@@ -10,6 +10,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.storage.FirebaseStorage
 import drm.ezenglish.App
 import drm.ezenglish.entities.Question
@@ -70,7 +71,7 @@ class ListeningViewModel(private val app: App, storage: FirebaseStorage, dbRefer
         dbReference.child(path).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    snapshot.children.forEach { c -> c.getValue(Question::class.java)?.let { repositoryQuestions.add(it) } }
+                    snapshot.children.forEach { c -> c.getValue<Question>()?.let { repositoryQuestions.add(it) } }
                     questions.value = repositoryQuestions
                 }
             }
