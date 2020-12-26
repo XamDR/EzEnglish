@@ -21,4 +21,18 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_main" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        app:srcCompat="@drawable/ic_action_add_note"
+        app:tint="@color/primaryTextColor"
+        app:maxImageSize="40dp"
+        android:backgroundTint="@color/accentColor"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
