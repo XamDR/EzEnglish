@@ -16,17 +16,21 @@ class SplashScreenActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash_screen)
 
         val logo = findViewById<ImageView>(R.id.logo)
-        val textLogo = findViewById<TextView>(R.id.textLogo)
+        val title = findViewById<TextView>(R.id.title)
+        val subtitle = findViewById<TextView>(R.id.subtitle)
+        val footerText = findViewById<TextView>(R.id.footerText)
 
         val animation = AnimationUtils.loadAnimation(this, R.anim.splash_animation)
         logo.startAnimation(animation)
-        textLogo.startAnimation(animation)
+        title.startAnimation(animation)
+        subtitle.startAnimation(animation)
+        footerText.startAnimation(animation)
 
         Timer().schedule(timerTask {
             Intent(this@SplashScreenActivity, MainActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(this)
             }
-        }, 2000)
+        }, 3000)
     }
 }
