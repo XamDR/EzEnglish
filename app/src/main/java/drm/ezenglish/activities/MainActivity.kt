@@ -15,6 +15,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import drm.ezenglish.R
 import drm.ezenglish.util.UserPreferences
 import kotlin.properties.Delegates
@@ -22,6 +25,7 @@ import kotlin.properties.Delegates
 class MainActivity : AppCompatActivity() {
 
 	lateinit var dbReference: DatabaseReference
+	lateinit var storage: FirebaseStorage
 	private lateinit var firebaseDatabase: FirebaseDatabase
 	private var checkedTheme by Delegates.notNull<Int>()
 
@@ -40,6 +44,7 @@ class MainActivity : AppCompatActivity() {
 		navView.setupWithNavController(navController)
 
 		initFirebase()
+		storage = Firebase.storage
 		checkedTheme = checkTheme()
 	}
 
@@ -60,17 +65,6 @@ class MainActivity : AppCompatActivity() {
 			R.id.action_settings -> showSettingsDialog()
 		}
 		return super.onOptionsItemSelected(item)
-	}
-
-	fun getResourceAudio(): Int {
-		val audios = resources.obtainTypedArray(R.array.audios)
-		try {
-			val choice = (Math.random() * audios.length()).toInt()
-			return audios.getResourceId(choice, R.raw.family)
-		}
-		finally {
-		    audios.recycle()
-		}
 	}
 
 	private fun showAboutDialog() {

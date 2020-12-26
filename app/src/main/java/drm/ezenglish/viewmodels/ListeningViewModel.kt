@@ -1,5 +1,6 @@
 package drm.ezenglish.viewmodels
 
+import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
@@ -9,14 +10,23 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
+import com.google.firebase.storage.FirebaseStorage
 import drm.ezenglish.App
 import drm.ezenglish.entities.Question
+import drm.ezenglish.util.getPathFromUrl
 import java.util.*
 
-class ListeningViewModel(private val app: App, resourceId: Int) : AndroidViewModel(app) {
+class ListeningViewModel(private val app: App, storage: FirebaseStorage, dbReference: DatabaseReference)
+    : AndroidViewModel(app) {
 
-    private val player: MediaPlayer = MediaPlayer.create(app, resourceId)
+    private val player = MediaPlayer()
     private lateinit var timer: Timer
+
+    init {
+        player.setAudioAttributes(AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build())
+        fetchAudioUrlromFirebase(storage, dbReference)
+    }
 
     val isPlaying: LiveData<Boolean>
         get() = _isPlaying
@@ -24,7 +34,7 @@ class ListeningViewModel(private val app: App, resourceId: Int) : AndroidViewMod
 
     val duration: LiveData<Int>
         get() = _duration
-    private val _duration = MutableLiveData(player.duration)
+    private val _duration = MutableLiveData(0)
 
     val currentPosition = MutableLiveData(0)
 
@@ -45,12 +55,23 @@ class ListeningViewModel(private val app: App, resourceId: Int) : AndroidViewMod
 
     fun cleanUp () = player.release()
 
-    fun getQuestionsFromFirebase(dbReference: DatabaseReference, path: String) {
+    private fun fetchAudioUrlromFirebase(storage: FirebaseStorage, dbReference: DatabaseReference) {
+        val audiosRef = storage.getReference("audios")
+        audiosRef.listAll().addOnSuccessListener {
+            it.items.random().downloadUrl.addOnSuccessListener { uri ->
+                val url = uri.toString()
+                prepareMediaPlayer(url)
+                fetchQuestionsFromFirebase(dbReference, url.getPathFromUrl())
+            }
+        }
+    }
+
+    private fun fetchQuestionsFromFirebase(dbReference: DatabaseReference, path: String) {
         val repositoryQuestions = mutableListOf<Question>()
         dbReference.child(path).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    snapshot.children.forEach { c -> c.getValue(Question::class.java)?.let { repositoryQuestions.add(it) } }
+                    snapshot.children.forEach { c -> c.getValue<Question>()?.let { repositoryQuestions.add(it) } }
                     questions.value = repositoryQuestions
                 }
             }
@@ -61,6 +82,7 @@ class ListeningViewModel(private val app: App, resourceId: Int) : AndroidViewMod
     private fun playAudio() {
         player.start()
         _isPlaying.value = player.isPlaying
+        _duration.value = player.duration
 
         player.setOnCompletionListener {
             _isPlaying.value = it.isPlaying
@@ -85,5 +107,10 @@ class ListeningViewModel(private val app: App, resourceId: Int) : AndroidViewMod
             timer.cancel()
             timer.purge()
         }
+    }
+
+    private fun prepareMediaPlayer(url: String) {
+        player.setDataSource(url)
+        player.prepareAsync()
     }
 }

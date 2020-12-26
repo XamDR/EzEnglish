@@ -4,9 +4,9 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.*
+import com.google.firebase.database.ktx.getValue
 import drm.ezenglish.App
 import drm.ezenglish.entities.Quiz
-import drm.ezenglish.entities.SelectionRange
 import drm.ezenglish.util.template
 
 class WritingViewModel(private val app: App) : AndroidViewModel(app) {
@@ -27,20 +27,20 @@ class WritingViewModel(private val app: App) : AndroidViewModel(app) {
         })
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun getSentenceFromFirebase(dbReference: DatabaseReference, path: String = "pastPerfect", callback: (Quiz) -> Unit) {
         dbReference.child("writing").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     val topic = snapshot.child(path)
                     val randomChild = topic.children.toList().random()
-                    val sentence = randomChild.child("content").getValue(String::class.java)
-                    val genericTypeIndicator = object : GenericTypeIndicator<ArrayList<Int>>() {}
+                    val sentence = randomChild.child("content").getValue<String>()
                     val ranges = randomChild.children.filter { c -> c.key != "content" }
-                        .map { c -> c.getValue(genericTypeIndicator) as ArrayList<Int> }
-                        .map { a -> SelectionRange(a[0], a[1]) }
+                        .map { c -> c.getValue<ArrayList<@JvmSuppressWildcards Int>>() }
+                        .map { a -> Pair(a?.get(0), a?.get(1)) }
 
                     if (sentence != null) {
-                        quiz.value = Quiz(sentence, ranges)
+                        quiz.value = Quiz(sentence, ranges as List<Pair<Int, Int>>)
                     }
                     callback(quiz.value!!)
                 }
@@ -53,14 +53,14 @@ class WritingViewModel(private val app: App) : AndroidViewModel(app) {
         val builder = StringBuilder(quiz.content)
 
         for (i in quiz.ranges.size - 1 downTo 0) {
-            builder.deleteRange(quiz.ranges[i].start, quiz.ranges[i].start + quiz.ranges[i].length)
-            val length = quiz.ranges[i].length
+            builder.deleteRange(quiz.ranges[i].first, quiz.ranges[i].first + quiz.ranges[i].second)
+            val length = quiz.ranges[i].second
             val replacement = """<input id=""q$i""
                 type="text" class= "editable"
                 maxlength="$length" 
                 style ="width: ${ length * 1.162 } ch;"/>
             """.trimIndent()
-            builder.insert(quiz.ranges[i].start, replacement)
+            builder.insert(quiz.ranges[i].first, replacement)
         }
         return String.format(template, builder)
     }

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import com.google.firebase.database.DatabaseReference
 import drm.ezenglish.App
 import drm.ezenglish.R
 import drm.ezenglish.activities.MainActivity
@@ -21,10 +20,8 @@ class ListeningFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val mainActivity = activity as MainActivity
-        val resourceId = mainActivity.getResourceAudio()
-        viewModel = ListeningViewModel(mainActivity.application as App, resourceId)
+        viewModel = ListeningViewModel(mainActivity.application as App, mainActivity.storage, mainActivity.dbReference)
         binding.viewModel = viewModel
-        bindAdapter(mainActivity.dbReference, resourceId)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -41,13 +38,5 @@ class ListeningFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         viewModel.cleanUp()
-    }
-
-    private fun bindAdapter(dbReference: DatabaseReference, resourceId: Int) {
-        when (resourceId) {
-            R.raw.books -> viewModel.getQuestionsFromFirebase(dbReference,"books")
-            R.raw.family -> viewModel.getQuestionsFromFirebase(dbReference,"family")
-            R.raw.restaurant -> viewModel.getQuestionsFromFirebase(dbReference,"restaurant")
-        }
     }
 }
