@@ -1,17 +1,11 @@
 <resources>
     <string name="app_name">EzEnglish</string>
-    <string name="navigation_drawer_open">Abrir menú de navegación</string>
-    <string name="navigation_drawer_close">Cerrar menú de navegación</string>
-    <string name="nav_header_title">EzEnglish</string>
-    <string name="nav_header_subtitle">maxdr.mat@gmail.com</string>
-    <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Configuración</string>
     <string name="action_about">Acerca de</string>
     <string name="menu_home">Inicio</string>
     <string name="menu_listening">Escuchar</string>
     <string name="menu_speaking">Hablar</string>
     <string name="menu_writing">Escribir</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="launcher_title">EzEnglish</string>
     <string name="logo_desc">globe</string>
     <string name="fragment_listening_title">Reproducir audio</string>

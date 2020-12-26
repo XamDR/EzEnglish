@@ -7,13 +7,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.navigation.NavigationView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -25,7 +23,6 @@ class MainActivity : AppCompatActivity() {
 
 	lateinit var dbReference: DatabaseReference
 	private lateinit var firebaseDatabase: FirebaseDatabase
-	private lateinit var appBarConfiguration: AppBarConfiguration
 	private var checkedTheme by Delegates.notNull<Int>()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,14 +31,11 @@ class MainActivity : AppCompatActivity() {
 		val toolbar: Toolbar = findViewById(R.id.toolbar)
 		setSupportActionBar(toolbar)
 
-		val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-		val navView: NavigationView = findViewById(R.id.nav_view)
+		val navView = findViewById<BottomNavigationView>(R.id.nav_view)
 		val navController = findNavController(R.id.nav_host_fragment)
 
-		appBarConfiguration = AppBarConfiguration(
-			setOf(R.id.nav_home, R.id.nav_listening, R.id.nav_speaking, R.id.nav_writing),
-			drawerLayout
-		)
+		val appBarConfiguration = AppBarConfiguration(
+			setOf(R.id.nav_home, R.id.nav_listening, R.id.nav_speaking, R.id.nav_writing))
 		setupActionBarWithNavController(navController, appBarConfiguration)
 		navView.setupWithNavController(navController)
 
@@ -66,11 +60,6 @@ class MainActivity : AppCompatActivity() {
 			R.id.action_settings -> showSettingsDialog()
 		}
 		return super.onOptionsItemSelected(item)
-	}
-
-	override fun onSupportNavigateUp(): Boolean {
-		val navController = findNavController(R.id.nav_host_fragment)
-		return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
 	}
 
 	fun getResourceAudio(): Int {
